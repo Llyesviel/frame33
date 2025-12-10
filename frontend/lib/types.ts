@@ -156,20 +156,65 @@ export interface AstroEventsParams {
 }
 
 export interface AstroEvent {
+  type: string;
   body: string;
   event: string;
   date: string;
   time?: string;
-  extra_info?: Record<string, unknown>;
+}
+
+export interface AstroData {
+  bodies: Array<{
+    name: string;
+    azimuth: string;
+    altitude: string;
+    ra: string;
+    dec: string;
+    rise: string;
+    set: string;
+    culmination: string;
+    phase?: string;
+  }>;
+  phenomena: Array<{
+    category: string;
+    name: string;
+    time?: string;
+    date?: string;
+    status?: string;
+  }>;
+  time: {
+    sidereal_time: string;
+    julian_date: number;
+    timezone: string;
+    local_time: string;
+  };
+  observer: {
+    latitude: number;
+    longitude: number;
+    location: string;
+  };
+  configurations: Array<{
+    type: string;
+    body1?: string;
+    body2?: string;
+    body?: string;
+    date: string;
+  }>;
+  events: AstroEvent[];
 }
 
 export interface AstroEventsResponse {
-  events: AstroEvent[];
-  coordinates?: {
+  coordinates: {
     latitude: number;
     longitude: number;
     elevation: number;
   };
+  filters: {
+    from_date?: string;
+    to_date?: string;
+    body?: string;
+  };
+  events: AstroEvent[];
 }
 
 // CMS Types

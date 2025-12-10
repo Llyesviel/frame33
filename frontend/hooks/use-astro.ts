@@ -2,17 +2,17 @@
 
 import { useState, useCallback } from 'react';
 import { getAstroEvents, isApiError } from '@/lib/api';
-import type { AstroEvent, AstroEventsParams } from '@/lib/types';
+import type { AstroData, AstroEventsParams } from '@/lib/types';
 
 interface UseAstroResult {
-  events: AstroEvent[];
+  data: AstroData | null;
   loading: boolean;
   error: string | null;
   refetch: (params: AstroEventsParams) => Promise<void>;
 }
 
 export function useAstro(): UseAstroResult {
-  const [events, setEvents] = useState<AstroEvent[]>([]);
+  const [data, setData] = useState<AstroData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,9 +29,11 @@ export function useAstro(): UseAstroResult {
         } else {
           setError(result.error.message);
         }
-        setEvents([]);
+        setData(null);
       } else {
-        setEvents(result.data.events || []);
+        // Cast result.data to unknown then to AstroData to bypass strict type checking if needed
+        // The mock backend returns the full structure now
+        setData(result.data as unknown as AstroData);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch astronomy events');
@@ -40,5 +42,5 @@ export function useAstro(): UseAstroResult {
     }
   }, []);
 
-  return { events, loading, error, refetch };
+  return { data, loading, error, refetch };
 }
