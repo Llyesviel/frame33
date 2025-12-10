@@ -24,10 +24,14 @@ export function useAstro(): UseAstroResult {
       const result = await getAstroEvents(params);
 
       if (isApiError(result)) {
-        setError(result.error.message);
+        if (result.error.message.includes('403')) {
+          setError('Ошибка доступа (403). Проверьте ASTRONOMY_API_ID и SECRET в .env файле.');
+        } else {
+          setError(result.error.message);
+        }
         setEvents([]);
       } else {
-        setEvents(result.data.data?.rows || []);
+        setEvents(result.data.events || []);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch astronomy events');

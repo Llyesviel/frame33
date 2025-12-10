@@ -123,8 +123,15 @@ function JWSTImageCard({ image }: { image: JWSTImage }) {
     image.file_type === 'png' ||
     image.id.endsWith('.jpg') ||
     image.id.endsWith('.png');
-  const thumbnailUrl =
+
+  let thumbnailUrl =
     image.thumbnail || image.location || (isImageFile ? `https://api.jwstapi.com/thumb/${image.id}` : '');
+
+  // Upgrade HTTP to HTTPS to avoid mixed content errors
+  if (thumbnailUrl && thumbnailUrl.startsWith('http://')) {
+    thumbnailUrl = thumbnailUrl.replace('http://', 'https://');
+  }
+
   const showImage = Boolean(thumbnailUrl) && !hasError;
 
   return (

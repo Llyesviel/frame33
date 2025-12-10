@@ -23,7 +23,7 @@ export function ChartContainer({ config, className, children, style, ...props }:
     const entries: [string, string][] = [];
     let i = 1;
     for (const [key, value] of Object.entries(config)) {
-      entries.push([`--color-${key}`, value.color ?? `hsl(var(--chart-${i}))`]);
+      entries.push([`--color-${key}`, value.color ?? `var(--chart-${i})`]);
       i = i === 5 ? 1 : i + 1;
     }
     return Object.fromEntries(entries);
@@ -106,3 +106,7 @@ export function ChartLegendContent({ payload }: ChartLegendContentProps) {
     </div>
   );
 }
+
+
+
+

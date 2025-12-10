@@ -4,7 +4,10 @@ export interface ISSPosition {
   longitude: number;
   altitude_km: number;
   velocity_kmh: number;
+  visibility?: string;
   timestamp: string;
+  country_code?: string;
+  timezone_id?: string;
 }
 
 export interface ISSTrendResponse {
@@ -19,7 +22,10 @@ export type SpaceCacheSource = 'apod' | 'neo' | 'donki_flr' | 'donki_cme' | 'spa
 export interface SpaceCacheData {
   source: string;
   fetched_at: string;
+  ttl_hours?: number;
+  data?: APODData | NEOData | DONKIData | SpaceXData;
   payload: APODData | NEOData | DONKIData | SpaceXData;
+  is_stale?: boolean;
 }
 
 export interface APODData {
@@ -158,8 +164,11 @@ export interface AstroEvent {
 }
 
 export interface AstroEventsResponse {
-  data: {
-    rows: AstroEvent[];
+  events: AstroEvent[];
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+    elevation: number;
   };
 }
 

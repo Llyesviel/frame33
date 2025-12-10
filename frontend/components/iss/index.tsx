@@ -35,8 +35,8 @@ export function ISSSection({
         </Button>
       </div>
 
-      <ISSMetrics position={position} loading={loading} error={error} />
-      <ISSMap position={position} loading={loading} />
+      <ISSMetrics position={position} trend={trend} loading={loading} error={error} />
+      <ISSMap position={position} trend={trend} loading={loading} />
       <ISSCharts trend={trend} loading={loading} />
     </div>
   );
