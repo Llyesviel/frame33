@@ -104,7 +104,10 @@ export interface SpaceXData {
 export interface OSDRDataset {
   dataset_id: string;
   title: string;
+  name?: string;
   status: string;
+  mission?: string;
+  platform?: string;
   updated_at: string;
   raw?: Record<string, unknown>;
 }
@@ -134,10 +137,9 @@ export interface JWSTImage {
 }
 
 export interface JWSTFeedParams {
-  suffix?: string;
-  instrument?: string;
-  per_page?: number;
   page?: number;
+  perPage?: number;
+  fileType?: string[];
 }
 
 export interface JWSTFeedResponse {

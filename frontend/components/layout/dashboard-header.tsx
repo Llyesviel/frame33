@@ -2,43 +2,49 @@
 
 import { Rocket, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export function DashboardHeader() {
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const pathname = usePathname();
+
+  const getLinkClass = (path: string) => {
+    return pathname === path
+      ? "text-primary font-semibold"
+      : "hover:text-primary transition-colors text-muted-foreground";
   };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollToSection('status')}>
+        <Link href="/" className="flex items-center gap-2 cursor-pointer">
           <div className="flex items-center justify-center rounded-lg bg-primary/20 p-2">
             <Rocket className="h-5 w-5 text-primary" />
           </div>
           <h1 className="text-lg font-bold tracking-tight text-foreground/90">
             Space Dashboard
           </h1>
-        </div>
+        </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-          <button onClick={() => scrollToSection('status')} className="hover:text-primary transition-colors cursor-pointer bg-transparent border-none p-0">
-            Статус
-          </button>
-          <button onClick={() => scrollToSection('iss')} className="hover:text-primary transition-colors cursor-pointer bg-transparent border-none p-0">
+        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+          <Link href="/" className={getLinkClass('/')}>
+            Главная
+          </Link>
+          <Link href="/iss" className={getLinkClass('/iss')}>
             ISS
-          </button>
-          <button onClick={() => scrollToSection('osdr')} className="hover:text-primary transition-colors cursor-pointer bg-transparent border-none p-0">
+          </Link>
+          <Link href="/osdr" className={getLinkClass('/osdr')}>
             OSDR
-          </button>
-          <button onClick={() => scrollToSection('nasa-spacex')} className="hover:text-primary transition-colors cursor-pointer bg-transparent border-none p-0">
+          </Link>
+          <Link href="/space" className={getLinkClass('/space')}>
             NASA / SpaceX
-          </button>
-           <button onClick={() => scrollToSection('jwst')} className="hover:text-primary transition-colors cursor-pointer bg-transparent border-none p-0">
+          </Link>
+           <Link href="/jwst" className={getLinkClass('/jwst')}>
             JWST
-          </button>
+          </Link>
+           <Link href="/astro" className={getLinkClass('/astro')}>
+            Astro
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2">

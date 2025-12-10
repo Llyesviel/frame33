@@ -22,9 +22,18 @@ export function SpaceHero() {
             Космическая витрина наблюдений
           </h2>
 
-          <p className="text-muted-foreground text-lg leading-relaxed max-w-xl">
-            ISS, OSDR, APOD, NeoWs, DONKI, SpaceX, JWST, AstronomyAPI — единый фид в космическом фиолетовом стиле.
-          </p>
+          <div className="text-muted-foreground text-lg leading-relaxed max-w-xl">
+            <p className="mb-2">Источники данных:</p>
+            <ul className="grid grid-cols-2 gap-2 text-base">
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" />ISS (WhereTheISS)</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" />NASA OSDR</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" />NASA APOD & NeoWs</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" />NASA DONKI (Solar)</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" />SpaceX API</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" />JWST API</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" />AstronomyAPI</li>
+            </ul>
+          </div>
         </div>
       </CardContent>
     </Card>

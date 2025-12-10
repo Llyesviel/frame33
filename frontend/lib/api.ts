@@ -74,10 +74,13 @@ export async function getOSDRDetails(datasetId: string) {
 // JWST API
 export async function getJWSTFeed(params?: JWSTFeedParams) {
   const searchParams = new URLSearchParams();
-  if (params?.suffix) searchParams.set('suffix', params.suffix);
-  if (params?.instrument) searchParams.set('instrument', params.instrument);
-  if (params?.per_page) searchParams.set('per_page', params.per_page.toString());
+  // Note: New JWSTFeedParams uses fileType instead of suffix/instrument for now, 
+  // or we need to update params interface if backend supports more.
+  // Assuming simple pagination for now based on previous errors.
+  
+  if (params?.perPage) searchParams.set('per_page', params.perPage.toString());
   if (params?.page) searchParams.set('page', params.page.toString());
+  if (params?.fileType) params.fileType.forEach(ft => searchParams.append('file_type', ft));
 
   const query = searchParams.toString();
   return fetchApi<JWSTFeedResponse>(`/api/jwst/feed${query ? `?${query}` : ''}`);

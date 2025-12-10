@@ -50,3 +50,47 @@ async def get_dataset(
 
     data = await service.get_dataset(dataset_id)
     return success_response(data, trace_id)
+
+
+@router.get("/export/csv")
+async def export_csv(
+    service: OSDRService = Depends(get_osdr_service)
+):
+    """
+    Export all OSDR datasets as CSV.
+    """
+    from fastapi.responses import StreamingResponse
+    import io
+    import csv
+
+    # Fetch all datasets (high limit)
+    data = await service.list_datasets(limit=1000, offset=0)
+    datasets = data["datasets"]
+
+    # Create CSV in memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    # Header
+    writer.writerow(["id", "name", "description", "mission", "platform", "date_start", "date_end", "link"])
+    
+    # Rows
+    for ds in datasets:
+        writer.writerow([
+            ds["id"],
+            ds["name"],
+            ds.get("description", "")[:100] + "..." if ds.get("description") else "", # Truncate description
+            ds.get("mission", ""),
+            ds.get("platform", ""),
+            ds.get("date_start", ""),
+            ds.get("date_end", ""),
+            ds.get("link", "")
+        ])
+    
+    output.seek(0)
+    
+    return StreamingResponse(
+        io.BytesIO(output.getvalue().encode()),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=osdr_datasets.csv"}
+    )

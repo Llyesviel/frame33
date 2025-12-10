@@ -50,3 +50,47 @@ async def get_trend(
 
     data = await service.get_trend(hours=hours, limit=limit)
     return success_response(data, trace_id)
+
+
+@router.get("/export/csv")
+async def export_csv(
+    hours: int = Query(default=24, ge=1, le=168, description="Hours to look back"),
+    service: ISSService = Depends(get_iss_service)
+):
+    """
+    Export ISS position history as CSV.
+    """
+    from fastapi.responses import StreamingResponse
+    import io
+    import csv
+
+    # Fetch data (no limit, or high limit)
+    data = await service.get_trend(hours=hours, limit=10000)
+    positions = data["positions"]
+
+    # Create CSV in memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    # Header
+    writer.writerow(["timestamp", "latitude", "longitude", "altitude_km", "velocity_kmh", "visibility", "country_code"])
+    
+    # Rows
+    for pos in positions:
+        writer.writerow([
+            pos["timestamp"],
+            pos["latitude"],
+            pos["longitude"],
+            pos["altitude_km"],
+            pos["velocity_kmh"],
+            pos.get("visibility", ""),
+            pos.get("country_code", "")
+        ])
+    
+    output.seek(0)
+    
+    return StreamingResponse(
+        io.BytesIO(output.getvalue().encode()),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=iss_history_{hours}h.csv"}
+    )

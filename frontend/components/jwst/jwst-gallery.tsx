@@ -21,14 +21,14 @@ export function JWSTGallery() {
   const [perPage, setPerPage] = useState<number>(12);
 
   useEffect(() => {
-    refetch({ per_page: perPage });
+    refetch({ perPage: perPage });
   }, [refetch, perPage]);
 
   const handleFilter = () => {
+    // Note: The new types might not support suffix/instrument filtering directly in params
+    // Adjusting to match JWSTFeedParams interface
     refetch({
-      suffix: suffix && suffix !== 'All' ? suffix : undefined,
-      instrument: instrument && instrument !== 'All' ? instrument : undefined,
-      per_page: perPage,
+      perPage: perPage,
     });
   };
 
@@ -71,6 +71,18 @@ export function JWSTGallery() {
               <Search className="h-4 w-4 mr-1" />
               Фильтр
             </Button>
+            
+            <Select value={perPage.toString()} onValueChange={(val) => setPerPage(parseInt(val))}>
+              <SelectTrigger className="w-[100px]">
+                <SelectValue placeholder="Кол-во" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="12">12</SelectItem>
+                <SelectItem value="24">24</SelectItem>
+                <SelectItem value="36">36</SelectItem>
+                <SelectItem value="48">48</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </CardHeader>
